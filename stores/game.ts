@@ -145,21 +145,21 @@ export const useGameStore = defineStore("game", {
     rollCpuDie() {
       if (this.dynamic.phase !== "ROLLING_CPU_DIE") return;
 
+      const die = Math.floor(Math.random() * 6) + 1;
+
       this.dynamic = {
         phase: "PLACING_CPU_DIE",
-        cpuDie: Math.floor(Math.random() * 6) + 1,
+        cpuDie: die,
       };
 
       setTimeout(() => {
-        const validColumnIndexes = this.static.cpuBoard
-          .map((_, colIndex) => colIndex)
-          .filter((colIndex) =>
-            this.static.cpuBoard[colIndex].some((cell) => cell === null)
-          );
-
-        this.placeCpuDie(
-          validColumnIndexes[(Math.random() * validColumnIndexes.length) | 0]
+        const columnIndex = getBestColumn(
+          this.static.cpuBoard,
+          this.static.playerBoard,
+          die
         );
+
+        this.placeCpuDie(columnIndex);
       }, 1000);
     },
     placeCpuDie(column: number) {
@@ -222,4 +222,44 @@ function getBoardScore(board: (number | null)[][]) {
 
     return acc + colValue;
   }, 0);
+}
+
+function getBestColumn(
+  board: (number | null)[][],
+  enemyBoard: (number | null)[][],
+  die: number
+) {
+  const availableColumnsIndexes = board
+    .map((_, colIndex) => colIndex)
+    .filter((colIndex) => board[colIndex].some((cell) => cell === null));
+
+  const columnValues = availableColumnsIndexes.sort((colIndexA, colIndexB) => {
+    const colValueA = getColumnValue(colIndexA, board, enemyBoard, die);
+    const colValueB = getColumnValue(colIndexB, board, enemyBoard, die);
+
+    return colValueB - colValueA;
+  });
+
+  return columnValues[0];
+}
+
+function getColumnValue(
+  column: number,
+  board: (number | null)[][],
+  enemyBoard: (number | null)[][],
+  die: number
+) {
+  const colValue = board[column].reduce((colAcc: number, cell) => {
+    if (cell !== die) return colAcc;
+
+    return colAcc + die * board[column].filter((c) => c === die).length;
+  }, 0);
+
+  const enemyColValue = enemyBoard[column].reduce((colAcc: number, cell) => {
+    if (cell !== die) return colAcc;
+
+    return colAcc + die * enemyBoard[column].filter((c) => c === die).length;
+  }, 0);
+
+  return colValue + enemyColValue;
 }
