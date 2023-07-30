@@ -16,7 +16,7 @@
     >
       <div
         v-for="cell in col"
-        class="w-16 h-16 border border-stone-800 text-stone-700 flex justify-center items-center text-xl font-black group-hover:border-red-600"
+        class="w-12 h-12 lg:w-16 lg:h-16 border border-stone-800 text-stone-700 flex justify-center items-center text-xl font-black group-hover:border-red-600"
         @click="$emit('place', colIndex)"
       >
         <Dice

@@ -45,7 +45,7 @@
 <template>
   <client-only>
     <div
-      class="p-2 gap-0.5 rounded grid grid-cols-3 grid-rows-3 justify-center items-center"
+      class="p-1.5 lg:p-2 gap-0.5 rounded grid grid-cols-3 grid-rows-3 justify-center items-center"
       :class="
         clsx(
           animationClass ? animationClass : '',
@@ -59,7 +59,10 @@
           v-for="(cell, cellIndex) in row"
           :key="`${rowIndex}-${cellIndex}`"
         >
-          <div v-if="cell" class="w-2 h-2 bg-yellow-800 rounded-full" />
+          <div
+            v-if="cell"
+            class="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-yellow-800 rounded-full"
+          />
           <div v-else />
         </template>
       </template>
