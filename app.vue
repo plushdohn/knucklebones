@@ -25,26 +25,30 @@
   <div
     class="p-8 mx-auto relative max-w-xl w-full h-full overflow-y-auto flex flex-col justify-center items-center"
   >
-    <div class="w-full flex justify-between items-center gap-12 h-full">
+    <div
+      class="w-full flex justify-between items-center gap-4 lg:gap-12 h-full"
+    >
       <div
         class="text-stone-200 flex flex-col gap-2 justify-center items-center transition-all shrink-0"
         :class="{
           grayscale: store.isCpuTurn,
+          'scale-90': store.isCpuTurn,
         }"
       >
         <img src="~/assets/lamb.webp" alt="The Lamb" class="w-24" />
         <span class="text-xl lg:text-3xl font-black text-center font-serif"
-          >The Lamb</span
+          >Lamb</span
         >
-        <span class="italic text-3xl font-serif font-black text-yellow-200 mb-4"
+        <span
+          class="italic text-xl lg:text-3xl font-serif font-black text-yellow-200 mb-4"
           >{{ store.playerScore }} pts
         </span>
-        <SpinningDice v-if="store.dynamic.phase === 'ROLLING_PLAYER_DIE'" />
-        <Dice
-          v-else-if="store.dynamic.phase === 'PLACING_PLAYER_DIE'"
-          :value="store.dynamic.playerDie"
-        />
       </div>
+      <SpinningDice v-if="store.dynamic.phase === 'ROLLING_PLAYER_DIE'" />
+      <Dice
+        v-else-if="store.dynamic.phase === 'PLACING_PLAYER_DIE'"
+        :value="store.dynamic.playerDie"
+      />
       <Board
         :columns="store.static.playerBoard"
         @place="store.placePlayerDie"
@@ -52,26 +56,29 @@
       />
     </div>
 
-    <div class="w-full flex justify-between items-center gap-12 h-full">
+    <div
+      class="w-full flex justify-between items-center gap-4 lg:gap-12 h-full"
+    >
       <Board :columns="store.static.cpuBoard" />
+      <SpinningDice v-if="store.dynamic.phase === 'ROLLING_CPU_DIE'" />
+      <Dice
+        v-else-if="store.dynamic.phase === 'PLACING_CPU_DIE'"
+        :value="store.dynamic.cpuDie"
+      />
       <div
         class="flex flex-col items-center gap-2 text-white transition-all shrink-0"
         :class="{
           grayscale: store.isPlayerTurn,
+          'scale-90': store.isPlayerTurn,
         }"
       >
         <img src="~/assets/ratau.webp" alt="Ratau" class="w-24" />
         <span class="text-xl lg:text-3xl font-black text-center font-serif"
           >Ratau</span
         >
-        <span class="italic text-3xl font-serif font-black text-red-600 mb-4"
+        <span class="italic lg:text-3xl font-serif font-black text-red-600 mb-4"
           >{{ store.cpuScore }} pts</span
         >
-        <SpinningDice v-if="store.dynamic.phase === 'ROLLING_CPU_DIE'" />
-        <Dice
-          v-else-if="store.dynamic.phase === 'PLACING_CPU_DIE'"
-          :value="store.dynamic.cpuDie"
-        />
       </div>
     </div>
     <Transition>
