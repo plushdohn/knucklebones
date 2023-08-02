@@ -12,6 +12,7 @@
       class="flex flex-col gap-2 border-red-600"
       :class="{
         group: canPlace,
+        'cursor-pointer': canPlace,
       }"
     >
       <div
